@@ -6,6 +6,9 @@ from planilhas import os_go
 df = os_go()
 telefones = numeros()
 
+# mandar_para = ["Diogo", "Romilson"]
+mandar_para = ["Engevvia-163"]
+
 df = df[["DESCRIÇÃO", "RODOVIA", "DATA\nVENCIMENTO", "STATUS", "OBSERVAÇÕES"]]
 df["RODOVIA"] = df["RODOVIA"].ffill()
 df = df[df["STATUS"] != "Atendido"]
@@ -27,9 +30,11 @@ for i, row in df.iterrows():
     sep = "----------------------------- -------------------------------\n\n"
     text = text + desc + rod + venc + status + obs + sep
 print(text)
-msg = subprocess.run(
-    ["./send_message.sh", "send_message", telefones["Diogo"], text],
-    capture_output=True,
-    text=True,
-)
+for k, v in telefones.items():
+    if k in mandar_para:
+        msg = subprocess.run(
+            ["./send_message.sh", "send_message", v, text],
+            capture_output=True,
+            text=True,
+        )
 print(msg.stdout)
