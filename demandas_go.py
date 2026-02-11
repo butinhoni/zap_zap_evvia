@@ -6,8 +6,7 @@ from planilhas import os_go
 df = os_go()
 telefones = numeros()
 
-# mandar_para = ["Diogo", "Romilson"]
-mandar_para = ["Engevvia-163"]
+mandar_para = ["Diogo", "Romilson", "Guilherme"]
 
 df = df[["DESCRIÇÃO", "RODOVIA", "DATA\nVENCIMENTO", "STATUS", "OBSERVAÇÕES"]]
 df["RODOVIA"] = df["RODOVIA"].ffill()
@@ -37,4 +36,4 @@ for k, v in telefones.items():
             capture_output=True,
             text=True,
         )
-print(msg.stdout)
+        print(msg.stdout)
