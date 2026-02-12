@@ -18,7 +18,7 @@ df = df.dropna(subset="desc")
 df = df.dropna(subset="vencimento")
 df["obs"] = df["obs"].fillna("")
 
-text = "Olá equipe, segue relação das ordens de serviço em aberto no contrato GO Lote 3 \n\n"
+text = "Olá --fulano--, segue relação das ordens de serviço em aberto no contrato GO Lote 3 \n\n"
 for i, row in df.iterrows():
     data_format = row["vencimento"].strftime("%d/%m/%Y")
     desc = f"*Descrição:* {row['desc']}\n"
@@ -31,8 +31,9 @@ for i, row in df.iterrows():
 print(text)
 for k, v in telefones.items():
     if k in mandar_para:
+        final_text = text.replace("--fulano--", k)
         msg = subprocess.run(
-            ["./send_message.sh", "send_message", v, text],
+            ["./send_message.sh", "send_message", v, final_text],
             capture_output=True,
             text=True,
         )
