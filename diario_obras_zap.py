@@ -2,8 +2,7 @@ import pandas as pd
 import datetime
 import sqlite3
 import db_connector
-from resumos import perguntar
-import json
+from resumos import perguntar, embed
 
 zap = sqlite3.connect("store/messages.db")
 
@@ -52,6 +51,27 @@ def upar_resumos(resumo):
     conn.close()
 
 
+def upar_msg(msg):
+    conn = db_connector.open_conn()
+    cur = conn.cursor()
+    data = msg["data"]
+    obra = msg["local"]
+    texto = msg["texto"]
+    embed = msg["embed"]
+    local = msg["local"]
+    text = """
+    INSERT INTO zap.mensagens
+    ("data", obra, texto, embed, local)
+    VALUES('%s','%s','%s','%s','%s')
+        """ % (data, obra, texto, embed, local)
+
+    cur.execute(text)
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
 def ler_resumos():
     conn = db_connector.open_conn()
     cur = conn.cursor()
@@ -62,7 +82,7 @@ def ler_resumos():
     return df
 
 
-pergunta = "me faça um resumo, como um diario de obra, de todos os acontecimentos relatados nesse dia no grupo, caso sejam citados no contexto busque separar por IC (instrumento contratual) e rodovia (MT-XXX), caso as mensagens nao incluam citacoes a IC e rodovia, nao cite nada sobre. O texto que voce mandar eu vou colocar direto pro streamlit mostrar em um site, tenha isso em mente. tambem tenha em mente que vou subir a resposta em um banco de dados, entao evite mandar coisas como ` e ' (nao use d'agua, use de agua etc.)"
+pergunta = "me faça um resumo, como um diario de obra, de todos os acontecimentos relatados nesse dia no grupo, caso sejam citados no contexto busque separar por IC (instrumento contratual) e rodovia (MT-XXX), caso as mensagens nao incluam citacoes a IC e rodovia, nao cite nada sobre. O texto que voce mandar eu vou colocar direto pro streamlit mostrar em um site, tenha isso em mente. tambem tenha em mente que vou subir a resposta em um banco de dados, entao evite mandar coisas como ` e ' (nao use d'agua, use de agua etc.). Use apenas a data que vier na coluna DATA e ignore qualquer data no texto das mensagens"
 
 respostas = []
 
@@ -87,6 +107,16 @@ for i, row in grupos.iterrows():
             print("tem")
             continue
         temp = textos[textos["data"] == dia]
+        for _, row in temp.iterrows():
+            msg = {
+                "obra": row["obra"],
+                "data": dia,
+                "local": row["local"],
+                "embed": embed(row["content"]),
+                "msg": row["content"],
+            }
+            upar_msg(msg)
+
         context = temp.to_json()
         resposta = perguntar(context, pergunta)
         resumo = {

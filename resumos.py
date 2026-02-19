@@ -76,6 +76,11 @@ def gerar_descricao(caminho):
         return response.choices[0].message.content
 
 
+def embed(text):
+    response = client.embeddings.create(model="text-embedding-3-small", input=text)
+    return response.data[0].embedding
+
+
 def processar_imagens():
     cur.execute("""
 SELECT id, local_path, timestamp
