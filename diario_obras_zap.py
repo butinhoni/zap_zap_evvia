@@ -103,9 +103,6 @@ for i, row in grupos.iterrows():
     dias = textos["data"].unique()
 
     for dia in dias:
-        if dia in resumos_tem["data"].unique():
-            print("tem")
-            continue
         temp = textos[textos["data"] == dia]
         for _, row in temp.iterrows():
             msg = {
@@ -116,7 +113,9 @@ for i, row in grupos.iterrows():
                 "msg": row["content"],
             }
             upar_msg(msg)
-
+        if dia in resumos_tem["data"].unique():
+            print("tem")
+            continue
         context = temp.to_json()
         resposta = perguntar(context, pergunta)
         resumo = {
