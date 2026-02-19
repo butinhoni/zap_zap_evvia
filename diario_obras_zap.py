@@ -104,13 +104,13 @@ for i, row in grupos.iterrows():
 
     for dia in dias:
         temp = textos[textos["data"] == dia]
-        for _, row in temp.iterrows():
+        for _, row2 in temp.iterrows():
             msg = {
                 "obra": row["obra"],
                 "data": dia,
                 "local": row["local"],
-                "embed": embed(row["content"]),
-                "msg": row["content"],
+                "embed": embed(row2["content"]),
+                "msg": row2["content"],
             }
             upar_msg(msg)
         if dia in resumos_tem["data"].unique():
