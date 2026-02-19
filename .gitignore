@@ -3,3 +3,7 @@ planilhas.py
 numeros.py
 __pycache__/*
 store/*
+bd_temp/*
+file.txt
+messages2.db
+testegpt.py
