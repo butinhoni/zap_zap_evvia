@@ -109,8 +109,8 @@ for i, row in grupos.iterrows():
                 "obra": row["obra"],
                 "data": dia,
                 "local": row["local"],
-                "embed": embed(row2["content"]),
-                "msg": row2["content"],
+                "embed": embed(row2["msg"]),
+                "msg": row2["msg"],
             }
             upar_msg(msg)
         if dia in resumos_tem["data"].unique():
