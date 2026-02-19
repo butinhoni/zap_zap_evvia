@@ -110,7 +110,7 @@ for i, row in grupos.iterrows():
                 "data": dia,
                 "local": row["local"],
                 "embed": embed(row2["msg"]),
-                "msg": row2["msg"],
+                "texto": row2["msg"],
             }
             upar_msg(msg)
         if dia in resumos_tem["data"].unique():
